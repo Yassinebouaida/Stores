@@ -10,6 +10,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: opacity 0.3s ease;
+}
+.admin-login-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
 }
 .admin-login-box {
     background: white;
@@ -18,50 +23,31 @@
     text-align: center;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
-.admin-login-box h2 {
-    margin-bottom: 20px;
-    color: var(--text-primary);
-}
-.admin-login-box input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1.1em;
-    text-align: center;
-}
-.admin-login-box button {
-    width: 100%;
-    padding: 12px;
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1em;
-    cursor: pointer;
-}
+.admin-login-box h2 { margin-bottom: 20px; color: var(--text-primary); }
+.admin-login-box input { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 8px; font-size: 1.1em; text-align: center; }
+.admin-login-box button { width: 100%; padding: 12px; background-color: var(--accent-color); color: white; border: none; border-radius: 8px; font-size: 1.1em; cursor: pointer; }
 
-/* ---- Helper class to hide elements ---- */
-.hidden {
-    display: none !important;
+/* ---- Helper class ---- */
+.hidden { display: none !important; }
+
+/* ---- Footer Admin Icon ---- */
+.footer { position: relative; }
+.admin-icon {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    font-size: 1.8em;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+.admin-icon:hover {
+    opacity: 1;
+    transform: scale(1.2) rotate(45deg);
 }
 
 /* ---- ALL PREVIOUS CSS CODE ---- */
-:root {
-    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --header-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    --btn-gradient: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-    --btn-active-gradient: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
-    --text-primary: #2c3e50;
-    --text-secondary: #7f8c8d;
-    --bg-light: #f8f9fa;
-    --bg-white: white;
-    --footer-bg: #2c3e50;
-    --border-color: #ddd;
-    --accent-color: #3498db;
-    --danger-color: #e74c3c;
-}
+:root { --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --header-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); --btn-gradient: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); --btn-active-gradient: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%); --text-primary: #2c3e50; --text-secondary: #7f8c8d; --bg-light: #f8f9fa; --bg-white: white; --footer-bg: #2c3e50; --border-color: #ddd; --accent-color: #3498db; --danger-color: #e74c3c; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--primary-gradient); color: #333; line-height: 1.6; }
 .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
@@ -69,7 +55,6 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 .header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
 .header p { font-size: 1.2em; opacity: 0.9; }
 .add-story-button { margin-top: 15px; padding: 10px 20px; font-size: 1em; background-color: var(--accent-color); color: white; border: none; border-radius: 20px; cursor: pointer; transition: background-color 0.3s; }
-.add-story-button:hover { background-color: #2980b9; }
 .search-container { display: flex; justify-content: center; margin-bottom: 30px; }
 .search-input { padding: 15px; width: 100%; max-width: 400px; border: 2px solid var(--border-color); border-radius: 25px; font-size: 1.1em; text-align: center; transition: all 0.3s ease; }
 .search-input:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 10px rgba(52, 152, 219, 0.3); }
@@ -122,4 +107,3 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 .admin-form input[type="file"] { border: 1px solid #ccc; padding: 10px; }
 .submit-story-btn { padding: 15px; background: var(--btn-active-gradient); color: white; border: none; border-radius: 8px; font-size: 1.1em; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 15px; }
 .submit-story-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-.footer { background: var(--footer-bg); color: white; text-align: center; padding: 20px; border-radius: 15px; margin-top: 30px; }
