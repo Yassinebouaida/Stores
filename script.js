@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const adminLoginIcon = document.getElementById('adminLoginIcon');
     const addStoryBtn = document.getElementById('addStoryBtn');
     const storiesGrid = document.getElementById('stories-grid');
-    // (Rest of selectors)
     const categoryButtonsContainer = document.getElementById('category-buttons');
     const searchInput = document.getElementById('searchInput');
     const storyModal = document.getElementById('storyModal');
@@ -39,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 3. HELPER & ADMIN FUNCTIONS ---
 
-    // NEW: Reads a file and converts it to a Base64 string (for permanent storage)
     function readFileAsBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -52,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkAdminPassword() {
         if (adminPasswordInput.value === ADMIN_PASSWORD) {
             isAdminLoggedIn = true;
-            sessionStorage.setItem('isAdmin', 'true'); // Keep logged in for the session
+            sessionStorage.setItem('isAdmin', 'true');
             adminLoginOverlay.classList.add('hidden');
             updateAdminUI();
         } else {
@@ -62,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateAdminUI() {
-        // Check session storage to persist login on page reload
         if (sessionStorage.getItem('isAdmin') === 'true') {
             isAdminLoggedIn = true;
         }
@@ -72,16 +69,20 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             addStoryBtn.classList.add('hidden');
         }
-        // Re-render stories to show/hide delete buttons
-        const currentCategory = document.querySelector('.category-btn.active').dataset.category;
-        displayStories(currentCategory === 'all' ? stories : stories.filter(s => s.category === currentCategory));
+        
+        const currentCategoryBtn = document.querySelector('.category-btn.active');
+        if (currentCategoryBtn) {
+            const currentCategory = currentCategoryBtn.dataset.category;
+            displayStories(currentCategory === 'all' ? stories : stories.filter(s => s.category === currentCategory));
+        } else {
+            displayStories(stories);
+        }
     }
 
     // --- 4. PDF RENDERING FUNCTIONS ---
     function renderPage(num) {
         pageRendering = true;
         loadingIndicator.style.display = 'block';
-        // Convert Base64 back to binary for PDF.js
         const pdfData = atob(pdfDoc.split(',')[1]);
         const pdfBytes = new Uint8Array(pdfData.length);
         for (let i = 0; i < pdfData.length; i++) {
@@ -114,12 +115,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadStories() {
         const storiesFromStorage = localStorage.getItem('storiesApp');
         if (storiesFromStorage) {
+            // --==-- THIS IS THE CORRECTED LINE --==--
             stories = JSON.parse(storiesFromStorage);
         } else {
             stories = [{ id: 1, title: "قصة مثال", excerpt: "هذه قصة مثال. أضف قصصك الخاصة.", category: "مغامرات", imageUrl: 'https://via.placeholder.com/400x200.png?text=غلاف+القصة', pdfUrl: '' }];
         }
     }
     function saveStories() { localStorage.setItem('storiesApp', JSON.stringify(stories)); }
+
     function displayStories(storiesToDisplay) {
         storiesGrid.innerHTML = '';
         if (storiesToDisplay.length === 0) {
@@ -149,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function openStoryModal(story) {
         if (!story.pdfUrl) { alert("لا يوجد ملف PDF لهذه القصة."); return; }
         pdfTitle.textContent = story.title;
-        pdfDoc = story.pdfUrl; // Store the Base64 string
+        pdfDoc = story.pdfUrl;
         currentPageNum = 1;
         storyModal.classList.add('show');
         renderPage(currentPageNum);
@@ -163,32 +166,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const submitButton = e.target.querySelector('button[type="submit"]');
         submitButton.disabled = true;
         submitButton.textContent = "جاري الحفظ...";
-
         const title = document.getElementById('storyTitle').value;
         const excerpt = document.getElementById('storyExcerpt').value;
         const category = document.getElementById('storyCategory').value;
         const imageFile = document.getElementById('storyImage').files[0];
         const pdfFile = document.getElementById('storyPdf').files[0];
-
         if (!pdfFile || !imageFile || !title || !excerpt || !category) {
             alert('الرجاء ملء جميع الحقول.');
             submitButton.disabled = false;
             submitButton.textContent = "حفظ القصة";
             return;
         }
-
         try {
             const [imageUrl, pdfUrl] = await Promise.all([
                 readFileAsBase64(imageFile),
                 readFileAsBase64(pdfFile)
             ]);
-
             const newStory = { id: Date.now(), title, excerpt, category, imageUrl, pdfUrl };
             stories.unshift(newStory);
             saveStories();
             updateAdminUI();
             closeAdminPanel();
-
         } catch (error) {
             console.error("Error reading files:", error);
             alert("حدث خطأ أثناء قراءة الملفات.");
