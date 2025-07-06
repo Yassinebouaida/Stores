@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 1. SETUP & GLOBAL VARIABLES ---
     pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js`;
     let stories = [];
-    let pdfDoc = null;
+    let pdfDocObject = null; // This will hold the PDF Document object from PDF.js
     let currentPageNum = 1;
     let pageRendering = false;
     let pageNumPending = null;
@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const addStoryForm = document.getElementById('addStoryForm');
 
     // --- 3. HELPER & ADMIN FUNCTIONS ---
-
     function readFileAsBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -60,73 +59,65 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateAdminUI() {
-        if (sessionStorage.getItem('isAdmin') === 'true') {
-            isAdminLoggedIn = true;
-        }
-
-        if (isAdminLoggedIn) {
-            addStoryBtn.classList.remove('hidden');
-        } else {
-            addStoryBtn.classList.add('hidden');
-        }
+        isAdminLoggedIn = sessionStorage.getItem('isAdmin') === 'true';
+        addStoryBtn.classList.toggle('hidden', !isAdminLoggedIn);
         
         const currentCategoryBtn = document.querySelector('.category-btn.active');
-        if (currentCategoryBtn) {
-            const currentCategory = currentCategoryBtn.dataset.category;
-            displayStories(currentCategory === 'all' ? stories : stories.filter(s => s.category === currentCategory));
-        } else {
-            displayStories(stories);
-        }
+        const currentCategory = currentCategoryBtn ? currentCategoryBtn.dataset.category : 'all';
+        displayStories(currentCategory === 'all' ? stories : stories.filter(s => s.category === currentCategory));
     }
 
     // --- 4. PDF RENDERING FUNCTIONS ---
     function renderPage(num) {
         pageRendering = true;
-        loadingIndicator.style.display = 'block';
-        const pdfData = atob(pdfDoc.split(',')[1]);
-        const pdfBytes = new Uint8Array(pdfData.length);
-        for (let i = 0; i < pdfData.length; i++) {
-            pdfBytes[i] = pdfData.charCodeAt(i);
-        }
-        pdfjsLib.getDocument({ data: pdfBytes }).promise.then(doc => {
-            doc.getPage(num).then(page => {
-                const viewport = page.getViewport({ scale: PDF_SCALE });
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-                const renderContext = { canvasContext: ctx, viewport: viewport };
-                page.render(renderContext).promise.then(() => {
-                    pageRendering = false;
-                    loadingIndicator.style.display = 'none';
-                    if (pageNumPending !== null) { renderPage(pageNumPending); pageNumPending = null; }
-                    pageCountDisplay.textContent = doc.numPages;
-                    updatePageControls(doc.numPages);
-                });
+        pdfDocObject.getPage(num).then(page => {
+            const viewport = page.getViewport({ scale: PDF_SCALE });
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            const renderContext = { canvasContext: ctx, viewport: viewport };
+            page.render(renderContext).promise.then(() => {
+                pageRendering = false;
+                if (pageNumPending !== null) {
+                    renderPage(pageNumPending);
+                    pageNumPending = null;
+                }
             });
         });
         pageNumDisplay.textContent = num;
     }
 
-    function queueRenderPage(num) { if (pageRendering) { pageNumPending = num; } else { renderPage(num); } }
-    function updatePageControls(totalPages) { prevPageBtn.disabled = (currentPageNum <= 1); nextPageBtn.disabled = (currentPageNum >= totalPages); }
-    function onPrevPage() { if (currentPageNum <= 1) return; currentPageNum--; queueRenderPage(currentPageNum); }
-    function onNextPage() { const total = parseInt(pageCountDisplay.textContent); if (currentPageNum >= total) return; currentPageNum++; queueRenderPage(currentPageNum); }
+    function updatePageControls() {
+        prevPageBtn.disabled = (currentPageNum <= 1);
+        nextPageBtn.disabled = (currentPageNum >= pdfDocObject.numPages);
+    }
+    function onPrevPage() { if (currentPageNum <= 1) return; currentPageNum--; renderPage(currentPageNum); updatePageControls(); }
+    function onNextPage() { if (currentPageNum >= pdfDocObject.numPages) return; currentPageNum++; renderPage(currentPageNum); updatePageControls(); }
 
     // --- 5. CORE APP FUNCTIONS ---
     function loadStories() {
         const storiesFromStorage = localStorage.getItem('storiesApp');
         if (storiesFromStorage) {
-            // --==-- THIS IS THE CORRECTED LINE --==--
-            stories = JSON.parse(storiesFromStorage);
-        } else {
+            try {
+                // --==-- BULLETPROOFED: This will prevent crashes from corrupted data --==--
+                stories = JSON.parse(storiesFromStorage);
+            } catch (e) {
+                console.error("Error parsing stories from localStorage. Resetting.", e);
+                localStorage.removeItem('storiesApp'); // Remove corrupted data
+                stories = []; // Fallback to empty array
+            }
+        }
+        if (stories.length === 0) {
+            // Add a default story if storage is empty or was corrupted
             stories = [{ id: 1, title: "قصة مثال", excerpt: "هذه قصة مثال. أضف قصصك الخاصة.", category: "مغامرات", imageUrl: 'https://via.placeholder.com/400x200.png?text=غلاف+القصة', pdfUrl: '' }];
         }
     }
+
     function saveStories() { localStorage.setItem('storiesApp', JSON.stringify(stories)); }
 
     function displayStories(storiesToDisplay) {
         storiesGrid.innerHTML = '';
         if (storiesToDisplay.length === 0) {
-            storiesGrid.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; color: white; font-size: 1.2rem;">لا توجد قصص.</p>`;
+            storiesGrid.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; color: white; font-size: 1.2rem;">لا توجد قصص في هذا التصنيف.</p>`;
             return;
         }
         storiesToDisplay.forEach(story => {
@@ -141,8 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function deleteStory(storyId) {
         const storyToDelete = stories.find(s => s.id === storyId);
-        if (!storyToDelete) return;
-        if (confirm(`هل أنت متأكد من حذف قصة "${storyToDelete.title}"؟`)) {
+        if (storyToDelete && confirm(`هل أنت متأكد من حذف قصة "${storyToDelete.title}"؟`)) {
             stories = stories.filter(s => s.id !== storyId);
             saveStories();
             updateAdminUI();
@@ -150,14 +140,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openStoryModal(story) {
-        if (!story.pdfUrl) { alert("لا يوجد ملف PDF لهذه القصة."); return; }
+        if (!story.pdfUrl || story.pdfUrl.length < 100) { // Simple check if it's not a real Base64
+            alert("لا يوجد ملف PDF صالح لهذه القصة.");
+            return;
+        }
         pdfTitle.textContent = story.title;
-        pdfDoc = story.pdfUrl;
-        currentPageNum = 1;
+        loadingIndicator.style.display = 'block';
         storyModal.classList.add('show');
-        renderPage(currentPageNum);
+        
+        // Convert Base64 back to binary data for PDF.js
+        const pdfData = atob(story.pdfUrl.split(',')[1]);
+        const pdfBytes = new Uint8Array(pdfData.length);
+        for (let i = 0; i < pdfData.length; i++) {
+            pdfBytes[i] = pdfData.charCodeAt(i);
+        }
+
+        pdfjsLib.getDocument({ data: pdfBytes }).promise.then(doc => {
+            pdfDocObject = doc; // Store the actual PDF document object
+            pageCountDisplay.textContent = doc.numPages;
+            currentPageNum = 1;
+            renderPage(currentPageNum);
+            updatePageControls();
+            loadingIndicator.style.display = 'none';
+        }).catch(err => {
+            console.error("Error opening PDF:", err);
+            alert("حدث خطأ أثناء فتح ملف PDF.");
+            loadingIndicator.style.display = 'none';
+            closeStoryModal();
+        });
     }
-    function closeStoryModal() { storyModal.classList.remove('show'); pdfDoc = null; }
+
+    function closeStoryModal() { storyModal.classList.remove('show'); pdfDocObject = null; }
     function openAdminPanel() { adminPanel.classList.add('show'); }
     function closeAdminPanel() { adminPanel.classList.remove('show'); addStoryForm.reset(); }
 
@@ -166,24 +179,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const submitButton = e.target.querySelector('button[type="submit"]');
         submitButton.disabled = true;
         submitButton.textContent = "جاري الحفظ...";
+
         const title = document.getElementById('storyTitle').value;
         const excerpt = document.getElementById('storyExcerpt').value;
         const category = document.getElementById('storyCategory').value;
         const imageFile = document.getElementById('storyImage').files[0];
         const pdfFile = document.getElementById('storyPdf').files[0];
+
         if (!pdfFile || !imageFile || !title || !excerpt || !category) {
             alert('الرجاء ملء جميع الحقول.');
             submitButton.disabled = false;
             submitButton.textContent = "حفظ القصة";
             return;
         }
+
         try {
             const [imageUrl, pdfUrl] = await Promise.all([
                 readFileAsBase64(imageFile),
                 readFileAsBase64(pdfFile)
             ]);
-            const newStory = { id: Date.now(), title, excerpt, category, imageUrl, pdfUrl };
-            stories.unshift(newStory);
+            stories.unshift({ id: Date.now(), title, excerpt, category, imageUrl, pdfUrl });
             saveStories();
             updateAdminUI();
             closeAdminPanel();
@@ -207,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.addEventListener('input', (e) => { const searchTerm = e.target.value.toLowerCase().trim(); displayStories(stories.filter(s => s.title.toLowerCase().includes(searchTerm) || s.excerpt.toLowerCase().includes(searchTerm))); });
     storiesGrid.addEventListener('click', (e) => { const deleteButton = e.target.closest('.delete-story-btn'); const card = e.target.closest('.story-card'); if (deleteButton) { e.stopPropagation(); const storyId = parseInt(card.dataset.id); deleteStory(storyId); } else if (card) { const storyId = parseInt(card.dataset.id); const story = stories.find(s => s.id === storyId); if (story) openStoryModal(story); } });
     closeModalBtn.addEventListener('click', closeStoryModal);
-    storyModal.addEventListener('click', e => { if (e.target === storyModal) closeStoryModal(); });
+    storyModal.addEventListener('click', e => { if (e.target === storyModal) closeStoryModal() });
     addStoryBtn.addEventListener('click', openAdminPanel);
     closeAdminBtn.addEventListener('click', closeAdminPanel);
     addStoryForm.addEventListener('submit', handleFormSubmit);
