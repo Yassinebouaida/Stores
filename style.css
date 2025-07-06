@@ -1,4 +1,4 @@
-/* ---- NEW: Admin Login Styles ---- */
+/* ---- Admin Login Styles ---- */
 .admin-login-overlay {
     position: fixed;
     top: 0;
@@ -11,7 +11,6 @@
     justify-content: center;
     align-items: center;
 }
-
 .admin-login-box {
     background: white;
     padding: 30px 40px;
@@ -19,12 +18,10 @@
     text-align: center;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
-
 .admin-login-box h2 {
     margin-bottom: 20px;
     color: var(--text-primary);
 }
-
 .admin-login-box input {
     width: 100%;
     padding: 12px;
@@ -34,7 +31,6 @@
     font-size: 1.1em;
     text-align: center;
 }
-
 .admin-login-box button {
     width: 100%;
     padding: 12px;
@@ -46,7 +42,7 @@
     cursor: pointer;
 }
 
-/* ---- NEW: Helper class to hide elements ---- */
+/* ---- Helper class to hide elements ---- */
 .hidden {
     display: none !important;
 }
@@ -66,7 +62,6 @@
     --accent-color: #3498db;
     --danger-color: #e74c3c;
 }
-/* ... (The rest of your CSS code remains exactly the same as the previous full version) ... */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--primary-gradient); color: #333; line-height: 1.6; }
 .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
