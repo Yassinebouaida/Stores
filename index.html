@@ -5,21 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>قصص شيقة - Stories App</title>
     <link rel="stylesheet" href="style.css">
-    
-    <!-- PDF.js Library from CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
 
+    <!-- شاشة تسجيل دخول المطور (ستظهر أولاً) -->
+    <div id="adminLoginOverlay" class="admin-login-overlay">
+        <div class="admin-login-box">
+            <h2>تسجيل دخول المدير</h2>
+            <input type="password" id="adminPasswordInput" placeholder="أدخل كلمة السر">
+            <button id="adminLoginButton">دخول</button>
+        </div>
+    </div>
+
     <div class="container">
-        <!-- Header -->
         <header class="header">
             <h1>قصص شيقة</h1>
             <p>استكشف عالماً من الخيال والمغامرة</p>
-            <button id="addStoryBtn" class="add-story-button">أضف قصة جديدة +</button>
+            <!-- الزر سيتم إخفاؤه وإظهاره عبر JS -->
+            <button id="addStoryBtn" class="add-story-button hidden">أضف قصة جديدة +</button>
         </header>
 
-        <!-- Search & Categories -->
         <div class="search-container">
             <input type="text" id="searchInput" class="search-input" placeholder="ابحث عن قصة...">
         </div>
@@ -31,28 +37,23 @@
             <button class="category-btn" data-category="غموض">غموض</button>
         </div>
 
-        <!-- AdSense Ad Unit -->
         <div class="ad-space">
             <h4>إعلان</h4>
-            <!-- استبدل "ca-pub-XXXXXXXXXXXXXXXX" و "YYYYYYYYYY" بمعرفاتك الخاصة -->
             <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                 data-ad-slot="YYYYYYYYYY"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
+                style="display:block"
+                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-slot="YYYYYYYYYY"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
         </div>
 
-        <!-- Stories Grid -->
         <div class="stories-grid" id="stories-grid"></div>
-        
-        <!-- Footer -->
+
         <footer class="footer">
             <p>جميع الحقوق محفوظة © 2024</p>
         </footer>
     </div>
 
-    <!-- Story Modal with PDF Viewer Controls -->
     <div class="story-modal" id="storyModal">
         <div class="modal-content">
             <span class="close-btn" id="closeModalBtn">×</span>
@@ -70,20 +71,17 @@
                     <button id="next-page" title="الصفحة التالية">»</button>
                 </div>
             </div>
-            <!-- AdSense Ad Unit inside Modal -->
             <div class="ad-space-modal">
-                 <!-- استبدل "ca-pub-XXXXXXXXXXXXXXXX" و "ZZZZZZZZZZ" بمعرفاتك الخاصة -->
                 <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                     data-ad-slot="ZZZZZZZZZZ"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
+                    style="display:block"
+                    data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                    data-ad-slot="ZZZZZZZZZZ"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
             </div>
         </div>
     </div>
-    
-    <!-- Admin Panel -->
+
     <div class="admin-panel" id="adminPanel">
         <div class="admin-content">
             <header class="admin-header">
@@ -109,9 +107,7 @@
         </div>
     </div>
 
-    <!-- AdSense Script - استبدل "ca-pub-XXXXXXXXXXXXXXXX" بمعرف الناشر الخاص بك -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
     <script src="script.js"></script>
 </body>
 </html>
