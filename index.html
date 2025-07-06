@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قصص شيقة - Stories App</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- PDF.js Library from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>قصص شيقة</h1>
+            <p>استكشف عالماً من الخيال والمغامرة</p>
+            <button id="addStoryBtn" class="add-story-button">أضف قصة جديدة +</button>
+        </header>
+
+        <!-- Search & Categories -->
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="ابحث عن قصة...">
+        </div>
+        <div class="categories" id="category-buttons">
+            <button class="category-btn active" data-category="all">كل القصص</button>
+            <button class="category-btn" data-category="مغامرات">مغامرات</button>
+            <button class="category-btn" data-category="خيال علمي">خيال علمي</button>
+            <button class="category-btn" data-category="كوميديا">كوميديا</button>
+            <button class="category-btn" data-category="غموض">غموض</button>
+        </div>
+
+        <!-- AdSense Ad Unit -->
+        <div class="ad-space">
+            <h4>إعلان</h4>
+            <!-- استبدل "ca-pub-XXXXXXXXXXXXXXXX" و "YYYYYYYYYY" بمعرفاتك الخاصة -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="YYYYYYYYYY"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
+
+        <!-- Stories Grid -->
+        <div class="stories-grid" id="stories-grid"></div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p>جميع الحقوق محفوظة © 2024</p>
+        </footer>
+    </div>
+
+    <!-- Story Modal with PDF Viewer Controls -->
+    <div class="story-modal" id="storyModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModalBtn">×</span>
+            <div class="pdf-viewer">
+                <div class="pdf-header">
+                    <h2 id="pdf-title">عنوان القصة</h2>
+                </div>
+                <div class="pdf-canvas-container">
+                    <canvas id="pdf-canvas"></canvas>
+                    <div class="loading-indicator" id="loadingIndicator">جاري تحميل القصة...</div>
+                </div>
+                <div class="pdf-controls">
+                    <button id="prev-page" title="الصفحة السابقة">«</button>
+                    <span>صفحة <span id="page-num">0</span> من <span id="page-count">0</span></span>
+                    <button id="next-page" title="الصفحة التالية">»</button>
+                </div>
+            </div>
+            <!-- AdSense Ad Unit inside Modal -->
+            <div class="ad-space-modal">
+                 <!-- استبدل "ca-pub-XXXXXXXXXXXXXXXX" و "ZZZZZZZZZZ" بمعرفاتك الخاصة -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                     data-ad-slot="ZZZZZZZZZZ"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-content">
+            <header class="admin-header">
+                <h2>إضافة قصة جديدة</h2>
+                <button class="close-admin-btn" id="closeAdminBtn">×</button>
+            </header>
+            <form id="addStoryForm" class="admin-form">
+                <input type="text" id="storyTitle" placeholder="عنوان القصة" required>
+                <textarea id="storyExcerpt" rows="3" placeholder="نبذة مختصرة عن القصة" required></textarea>
+                <select id="storyCategory" required>
+                    <option value="" disabled selected>اختر التصنيف</option>
+                    <option value="مغامرات">مغامرات</option>
+                    <option value="خيال علمي">خيال علمي</option>
+                    <option value="كوميديا">كوميديا</option>
+                    <option value="غموض">غموض</option>
+                </select>
+                <label for="storyImage">صورة الغلاف:</label>
+                <input type="file" id="storyImage" accept="image/*" required>
+                <label for="storyPdf">ملف القصة (PDF):</label>
+                <input type="file" id="storyPdf" required>
+                <button type="submit" class="submit-story-btn">حفظ القصة</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- AdSense Script - استبدل "ca-pub-XXXXXXXXXXXXXXXX" بمعرف الناشر الخاص بك -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+     crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</body>
+</html>
