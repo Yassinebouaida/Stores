@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <!-- شاشة تسجيل دخول المطور (ستظهر أولاً) -->
+    <!-- شاشة تسجيل دخول المدير -->
     <div id="adminLoginOverlay" class="admin-login-overlay">
         <div class="admin-login-box">
             <h2>تسجيل دخول المدير</h2>
@@ -22,10 +22,11 @@
         <header class="header">
             <h1>قصص شيقة</h1>
             <p>استكشف عالماً من الخيال والمغامرة</p>
-            <!-- الزر سيتم إخفاؤه وإظهاره عبر JS -->
+            <!-- هذا الزر مخفي بشكل افتراضي وسيظهر فقط بعد تسجيل الدخول -->
             <button id="addStoryBtn" class="add-story-button hidden">أضف قصة جديدة +</button>
         </header>
 
+        <!-- (بقية الكود لم يتغير) -->
         <div class="search-container">
             <input type="text" id="searchInput" class="search-input" placeholder="ابحث عن قصة...">
         </div>
@@ -36,31 +37,20 @@
             <button class="category-btn" data-category="كوميديا">كوميديا</button>
             <button class="category-btn" data-category="غموض">غموض</button>
         </div>
-
         <div class="ad-space">
             <h4>إعلان</h4>
-            <ins class="adsbygoogle"
-                style="display:block"
-                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                data-ad-slot="YYYYYYYYYY"
-                data-ad-format="auto"
-                data-full-width-responsive="true"></ins>
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="YYYYYYYYYY" data-ad-format="auto" data-full-width-responsive="true"></ins>
         </div>
-
         <div class="stories-grid" id="stories-grid"></div>
-
         <footer class="footer">
             <p>جميع الحقوق محفوظة © 2024</p>
         </footer>
     </div>
-
     <div class="story-modal" id="storyModal">
         <div class="modal-content">
             <span class="close-btn" id="closeModalBtn">×</span>
             <div class="pdf-viewer">
-                <div class="pdf-header">
-                    <h2 id="pdf-title">عنوان القصة</h2>
-                </div>
+                <div class="pdf-header"><h2 id="pdf-title">عنوان القصة</h2></div>
                 <div class="pdf-canvas-container">
                     <canvas id="pdf-canvas"></canvas>
                     <div class="loading-indicator" id="loadingIndicator">جاري تحميل القصة...</div>
@@ -72,16 +62,10 @@
                 </div>
             </div>
             <div class="ad-space-modal">
-                <ins class="adsbygoogle"
-                    style="display:block"
-                    data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                    data-ad-slot="ZZZZZZZZZZ"
-                    data-ad-format="auto"
-                    data-full-width-responsive="true"></ins>
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="ZZZZZZZZZZ" data-ad-format="auto" data-full-width-responsive="true"></ins>
             </div>
         </div>
     </div>
-
     <div class="admin-panel" id="adminPanel">
         <div class="admin-content">
             <header class="admin-header">
@@ -106,7 +90,6 @@
             </form>
         </div>
     </div>
-
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
     <script src="script.js"></script>
 </body>
