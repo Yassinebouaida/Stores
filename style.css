@@ -1,4 +1,57 @@
-/* Using CSS Variables for easier theme management */
+/* ---- NEW: Admin Login Styles ---- */
+.admin-login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 3000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-login-box {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.admin-login-box h2 {
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.admin-login-box input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+.admin-login-box button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+}
+
+/* ---- NEW: Helper class to hide elements ---- */
+.hidden {
+    display: none !important;
+}
+
+/* ---- ALL PREVIOUS CSS CODE ---- */
 :root {
     --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --header-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
@@ -13,470 +66,65 @@
     --accent-color: #3498db;
     --danger-color: #e74c3c;
 }
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: var(--primary-gradient);
-    color: #333;
-    line-height: 1.6;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.header {
-    background: var(--header-gradient);
-    color: var(--bg-white);
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    margin-bottom: 30px;
-    border-radius: 15px;
-}
-
-.header h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.header p {
-    font-size: 1.2em;
-    opacity: 0.9;
-}
-
-.add-story-button {
-    margin-top: 15px;
-    padding: 10px 20px;
-    font-size: 1em;
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.add-story-button:hover {
-    background-color: #2980b9;
-}
-
-.search-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 30px;
-}
-
-.search-input {
-    padding: 15px;
-    width: 100%;
-    max-width: 400px;
-    border: 2px solid var(--border-color);
-    border-radius: 25px;
-    font-size: 1.1em;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
-}
-
-.categories {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-}
-
-.category-btn {
-    padding: 12px 25px;
-    background: var(--btn-gradient);
-    color: var(--bg-white);
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 1.1em;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-
-.category-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-}
-
-.category-btn.active {
-    background: var(--btn-active-gradient);
-}
-
-.ad-space, .ad-space-modal {
-    background: #f0f0f0;
-    border: 2px dashed #ccc;
-    padding: 10px;
-    text-align: center;
-    margin: 20px auto;
-    border-radius: 10px;
-    color: #888;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 90px;
-    width: 100%;
-}
-.ad-space h4 {
-    margin: 0;
-}
-.ad-space-modal {
-    margin-top: 15px;
-    flex-shrink: 0;
-}
-
-.stories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-    margin-bottom: 30px;
-}
-
-.story-card {
-    background: var(--bg-white);
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    position: relative; /* Crucial for positioning the delete button */
-}
-
-.story-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 35px rgba(0,0,0,0.2);
-}
-
-.story-card .story-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    background-color: #eee;
-}
-
-.story-content {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-.story-title {
-    font-size: 1.4em;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: var(--text-primary);
-}
-
-.story-excerpt {
-    color: var(--text-secondary);
-    margin-bottom: 15px;
-    line-height: 1.5;
-    flex-grow: 1;
-}
-
-.story-meta {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    font-size: 0.9em;
-    color: #95a5a6;
-    margin-top: auto;
-}
-
-.story-category {
-    background: var(--accent-color);
-    color: var(--bg-white);
-    padding: 4px 12px;
-    border-radius: 15px;
-    font-size: 0.8em;
-}
-
-/* Delete Story Button Styling */
-.delete-story-btn {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 40px;
-    height: 40px;
-    background-color: rgba(231, 76, 60, 0.8);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    font-size: 1.2em;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    opacity: 0;
-    transform: scale(0.8);
-    z-index: 5;
-}
-
-.story-card:hover .delete-story-btn {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.delete-story-btn:hover {
-    background-color: #c0392b;
-    transform: scale(1.1) rotate(15deg);
-}
-
-
-/* Modal and PDF Viewer */
-.story-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-}
-.story-modal.show {
-    display: flex;
-}
-.modal-content {
-    background: var(--bg-white);
-    padding: 15px;
-    width: 100%;
-    max-width: 900px;
-    border-radius: 15px;
-    height: 95vh;
-    max-height: 95vh;
-    overflow: hidden;
-    position: relative;
-    animation: fadeIn 0.3s ease;
-    display: flex;
-    flex-direction: column;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-.close-btn {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 2em;
-    cursor: pointer;
-    color: var(--danger-color);
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: var(--bg-light);
-    transition: all 0.2s ease;
-    z-index: 10;
-}
-.close-btn:hover {
-    background: var(--danger-color);
-    color: var(--bg-white);
-    transform: rotate(90deg);
-}
-.pdf-viewer {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.pdf-header {
-    padding: 5px 0 10px;
-    border-bottom: 1px solid #eee;
-    margin-bottom: 10px;
-    text-align: center;
-    flex-shrink: 0;
-}
-.pdf-header #pdf-title {
-    font-size: 1.5em;
-    color: var(--text-primary);
-    padding: 0 50px;
-}
-
-.pdf-canvas-container {
-    flex-grow: 1;
-    overflow: auto;
-    background: #f9f9f9;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    position: relative;
-}
-.loading-indicator {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1.2em;
-    color: #555;
-    display: none;
-}
-#pdf-canvas {
-    border: 1px solid #ddd;
-    max-width: 100%;
-    height: auto !important;
-}
-
-.pdf-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 0 5px;
-    gap: 15px;
-    flex-shrink: 0;
-}
-.pdf-controls button {
-    padding: 8px 16px;
-    border: 1px solid var(--accent-color);
-    background-color: var(--accent-color);
-    color: white;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    font-size: 1.2em;
-    font-weight: bold;
-}
-.pdf-controls button:hover {
-    background-color: #2980b9;
-}
-.pdf-controls button:disabled {
-    background-color: #ccc;
-    border-color: #ccc;
-    cursor: not-allowed;
-}
-.pdf-controls span {
-    font-size: 1.1em;
-    color: var(--text-primary);
-    white-space: nowrap;
-}
-
-/* Admin Panel */
-.admin-panel {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 2000;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    overflow-y: auto;
-}
-.admin-panel.show {
-    display: flex;
-}
-.admin-content {
-    background: white;
-    width: 100%;
-    max-width: 600px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    animation: fadeIn 0.3s ease;
-    overflow: hidden;
-}
-.admin-header {
-    background: var(--text-primary);
-    color: white;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.admin-header h2 {
-    font-size: 1.4em;
-}
-.close-admin-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 2.5em;
-    line-height: 1;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-.close-admin-btn:hover {
-    transform: scale(1.2);
-}
-.admin-form {
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-.admin-form input, .admin-form textarea, .admin-form select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1em;
-}
-.admin-form label {
-    font-weight: bold;
-    color: var(--text-primary);
-    margin-top: 5px;
-    margin-bottom: -5px;
-}
-.admin-form input[type="file"] {
-    border: 1px solid #ccc;
-    padding: 10px;
-}
-.submit-story-btn {
-    padding: 15px;
-    background: var(--btn-active-gradient);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1em;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    margin-top: 15px;
-}
-.submit-story-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-.footer {
-    background: var(--footer-bg);
-    color: white;
-    text-align: center;
-    padding: 20px;
-    border-radius: 15px;
-    margin-top: 30px;
-}
+/* ... (The rest of your CSS code remains exactly the same as the previous full version) ... */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--primary-gradient); color: #333; line-height: 1.6; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.header { background: var(--header-gradient); color: var(--bg-white); padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); margin-bottom: 30px; border-radius: 15px; }
+.header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+.header p { font-size: 1.2em; opacity: 0.9; }
+.add-story-button { margin-top: 15px; padding: 10px 20px; font-size: 1em; background-color: var(--accent-color); color: white; border: none; border-radius: 20px; cursor: pointer; transition: background-color 0.3s; }
+.add-story-button:hover { background-color: #2980b9; }
+.search-container { display: flex; justify-content: center; margin-bottom: 30px; }
+.search-input { padding: 15px; width: 100%; max-width: 400px; border: 2px solid var(--border-color); border-radius: 25px; font-size: 1.1em; text-align: center; transition: all 0.3s ease; }
+.search-input:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 10px rgba(52, 152, 219, 0.3); }
+.categories { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
+.category-btn { padding: 12px 25px; background: var(--btn-gradient); color: var(--bg-white); border: none; border-radius: 25px; cursor: pointer; font-size: 1.1em; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+.category-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+.category-btn.active { background: var(--btn-active-gradient); }
+.ad-space, .ad-space-modal { background: #f0f0f0; border: 2px dashed #ccc; padding: 10px; text-align: center; margin: 20px auto; border-radius: 10px; color: #888; display: flex; align-items: center; justify-content: center; min-height: 90px; width: 100%; }
+.ad-space h4 { margin: 0; }
+.ad-space-modal { margin-top: 15px; flex-shrink: 0; }
+.stories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 30px; }
+.story-card { background: var(--bg-white); border-radius: 15px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: all 0.3s ease; cursor: pointer; display: flex; flex-direction: column; position: relative; }
+.story-card:hover { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(0,0,0,0.2); }
+.story-card .story-image { width: 100%; height: 200px; object-fit: cover; background-color: #eee; }
+.story-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
+.story-title { font-size: 1.4em; font-weight: bold; margin-bottom: 10px; color: var(--text-primary); }
+.story-excerpt { color: var(--text-secondary); margin-bottom: 15px; line-height: 1.5; flex-grow: 1; }
+.story-meta { display: flex; justify-content: flex-end; align-items: center; font-size: 0.9em; color: #95a5a6; margin-top: auto; }
+.story-category { background: var(--accent-color); color: var(--bg-white); padding: 4px 12px; border-radius: 15px; font-size: 0.8em; }
+.delete-story-btn { position: absolute; top: 10px; left: 10px; width: 40px; height: 40px; background-color: rgba(231, 76, 60, 0.8); color: white; border: none; border-radius: 50%; font-size: 1.2em; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 5; }
+.story-card:hover .delete-story-btn { opacity: 1; transform: scale(1); }
+.delete-story-btn:hover { background-color: #c0392b; transform: scale(1.1) rotate(15deg); }
+.story-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; padding: 10px; }
+.story-modal.show { display: flex; }
+.modal-content { background: var(--bg-white); padding: 15px; width: 100%; max-width: 900px; border-radius: 15px; height: 95vh; max-height: 95vh; overflow: hidden; position: relative; animation: fadeIn 0.3s ease; display: flex; flex-direction: column; }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+.close-btn { position: absolute; top: 10px; left: 10px; font-size: 2em; cursor: pointer; color: var(--danger-color); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--bg-light); transition: all 0.2s ease; z-index: 10; }
+.close-btn:hover { background: var(--danger-color); color: var(--bg-white); transform: rotate(90deg); }
+.pdf-viewer { width: 100%; height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+.pdf-header { padding: 5px 0 10px; border-bottom: 1px solid #eee; margin-bottom: 10px; text-align: center; flex-shrink: 0; }
+.pdf-header #pdf-title { font-size: 1.5em; color: var(--text-primary); padding: 0 50px; }
+.pdf-canvas-container { flex-grow: 1; overflow: auto; background: #f9f9f9; border-radius: 5px; display: flex; justify-content: center; align-items: flex-start; position: relative; }
+.loading-indicator { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2em; color: #555; display: none; }
+#pdf-canvas { border: 1px solid #ddd; max-width: 100%; height: auto !important; }
+.pdf-controls { display: flex; justify-content: center; align-items: center; padding: 10px 0 5px; gap: 15px; flex-shrink: 0; }
+.pdf-controls button { padding: 8px 16px; border: 1px solid var(--accent-color); background-color: var(--accent-color); color: white; border-radius: 20px; cursor: pointer; transition: background-color 0.2s; font-size: 1.2em; font-weight: bold; }
+.pdf-controls button:hover { background-color: #2980b9; }
+.pdf-controls button:disabled { background-color: #ccc; border-color: #ccc; cursor: not-allowed; }
+.pdf-controls span { font-size: 1.1em; color: var(--text-primary); white-space: nowrap; }
+.admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 2000; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+.admin-panel.show { display: flex; }
+.admin-content { background: white; width: 100%; max-width: 600px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: fadeIn 0.3s ease; overflow: hidden; }
+.admin-header { background: var(--text-primary); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+.admin-header h2 { font-size: 1.4em; }
+.close-admin-btn { background: none; border: none; color: white; font-size: 2.5em; line-height: 1; cursor: pointer; transition: transform 0.2s; }
+.close-admin-btn:hover { transform: scale(1.2); }
+.admin-form { padding: 30px; display: flex; flex-direction: column; gap: 15px; }
+.admin-form input, .admin-form textarea, .admin-form select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1em; }
+.admin-form label { font-weight: bold; color: var(--text-primary); margin-top: 5px; margin-bottom: -5px; }
+.admin-form input[type="file"] { border: 1px solid #ccc; padding: 10px; }
+.submit-story-btn { padding: 15px; background: var(--btn-active-gradient); color: white; border: none; border-radius: 8px; font-size: 1.1em; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 15px; }
+.submit-story-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+.footer { background: var(--footer-bg); color: white; text-align: center; padding: 20px; border-radius: 15px; margin-top: 30px; }
